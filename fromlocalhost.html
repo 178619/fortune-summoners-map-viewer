@@ -8,16 +8,17 @@
                 return v.arrayBuffer()
             }).then((v)=>{
                 if (location.search.slice(1) == 'debug') {
-                    window.map = displayData(document.querySelector('section'), v)
+                    window.map = Map.displayData(document.querySelector('section'), v)
                     document.querySelector('section').onclick = (e) => {
                         console.log(Math.floor(e.layerX / 32), Math.floor(e.layerY / 32))
                     }
-                } else displayData(document.querySelector('section'), v)
+                } else Map.displayData(document.querySelector('section'), v)
             })
         </script>
     </head>
     <body>
         <section>
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </section>
     </body>
 </html>

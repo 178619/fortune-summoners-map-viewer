@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="sotesmap.css" rel="stylesheet" type="text/css">
+        <style>
+            section {
+                position: absolute;
+                margin: auto;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                border: 4px double white;
+                overflow: hidden;
+                cursor: grab;
+            }
+        </style>
+        <script src="sotesmap.js" type="text/javascript"></script>
+        <script>
+            const init = () => {
+                fetch('http://127.0.0.1:2481').then((v)=>{
+                    return v.arrayBuffer()
+                }).then((v)=>{
+                    if (location.search.slice(1) == 'debug') {
+                        window.map = Map.displayData(document.querySelector('section'), v)
+                        document.querySelector('section').onclick = (e) => {
+                            console.log(Math.floor(e.layerX / 32), Math.floor(e.layerY / 32))
+                        }
+                    } else Map.displayData(document.querySelector('section'), v)
+                    document.querySelector('section').style.width = '640px'
+                    document.querySelector('section').style.height = '480px'
+                    document.querySelector('.layer').style.top = 480 - map.heightPixel / 100 + 'px'
+                    ev_parallax()
+                })
+                pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                document.body.style.zoom = "1";
+                document.body.onpointerdown = pointerdown_handler;
+                document.body.onpointermove = pointermove_handler;
+                document.body.onpointerup = pointerup_handler;
+                document.body.onpointercancel = pointerup_handler;
+                document.body.onpointerout = pointerup_handler;
+                document.body.onpointerleave = pointerup_handler;
+            }
+
+			function ev_parallax() {
+				const scroll_x_px = -document.querySelector('.layer').offsetLeft
+				const scroll_y_px = -document.querySelector('.layer').offsetTop
+
+                document.querySelector('.parallax.front').style.backgroundPositionX = (map.mapParallaxFront.offsetX || 0) - Math.floor(scroll_x_px / (map.mapParallaxFront.scrollX || 2)) + 'px'
+                document.querySelector('.parallax.front').style.backgroundPositionY = (map.mapParallaxFront.offsetY || 0) - Math.min(28, Math.floor(scroll_y_px / (map.mapParallaxFront.scrollY || 4))) + 'px'
+                document.querySelector('.parallax.back').style.backgroundPositionX = (map.mapParallaxBack.offsetX || 0) - Math.floor(scroll_x_px / (map.mapParallaxBack.scrollX || 4)) + 'px'
+                document.querySelector('.parallax.back').style.backgroundPositionY = (map.mapParallaxBack.offsetY || 0) + 'px'
+			}
+
+            var evCache = new Array();
+            var prevDiff = -1;
+
+            function pointerdown_handler(e) {
+                e.preventDefault();
+                document.querySelector('section').style.cursor = 'grabbing'
+                lastMouseDown = new Date()
+                evCache.push(e);
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                if (evCache.length < 2 && document.querySelector('section').contains(e.target)) {
+                    document.onpointermove = elementDrag;
+                    document.onpointerup = closeDragElement;
+                    document.onpointercancel = closeDragElement;
+                } else closeDragElement();
+            }
+
+            function pointermove_handler(e) {
+                for (var i = 0; i < evCache.length; i++) {
+                    if (e.pointerId == evCache[i].pointerId) {
+                    evCache[i] = e;
+                    break;
+                    }
+                }
+                if (evCache.length == 2) {
+                    var curDiff = Math.abs(evCache[0].clientX - evCache[1].clientX);
+                    if (prevDiff > 0) {
+                    document.body.style.zoom = parseFloat(document.body.style.zoom) * (1 + (curDiff - prevDiff) / window.innerWidth);
+                    }
+                    prevDiff = curDiff;
+                }
+            }
+
+            function pointerup_handler(e) {
+                remove_event(e);
+                if (evCache.length < 2) {
+                    prevDiff = -1;
+                }
+            }
+
+            function remove_event(e) {
+                for (var i = 0; i < evCache.length; i++) {
+                    if (evCache[i].pointerId == e.pointerId) {
+                        evCache.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.querySelector('.layer').style.top = (document.querySelector('.layer').offsetTop - pos2) + "px";
+                document.querySelector('.layer').style.left = (document.querySelector('.layer').offsetLeft - pos1) + "px";
+                ev_parallax()
+            }
+
+            function closeDragElement() {
+                document.onpointermove = null;
+                document.onpointerup = null;
+                document.onpointercancel = null;
+                document.querySelector('section').style.cursor = 'grab'
+                if (document.querySelector('.layer').offsetTop < 480 - map.heightPixel / 100) {
+                    document.querySelector('.layer').style.top = 480 - map.heightPixel / 100 + 'px'
+                } else if (document.querySelector('.layer').offsetTop > 0) {
+                    document.querySelector('.layer').style.top = 0 + 'px'
+                }
+                if (document.querySelector('.layer').offsetLeft < 640 - map.widthPixel / 100) {
+                    document.querySelector('.layer').style.left = 640 - map.widthPixel / 100 + 'px'
+                } else if (document.querySelector('.layer').offsetLeft > 0) {
+                    document.querySelector('.layer').style.left = 0 + 'px'
+                }
+                ev_parallax()
+            }
+
+        </script>
+    </head>
+    <body onload="init()">
+        <section>
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </section>
+    </body>
+</html>
