@@ -1,0 +1,46 @@
+body {
+    background-color: black;
+    margin: 0;
+}
+.background {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: -10;
+    background-position: left bottom;
+}
+.parallax {
+    position: absolute;
+    background-repeat: repeat-x;
+    background-position: left bottom;
+}
+.parallax.front {
+    z-index: -1;
+}
+.parallax.back {
+    z-index: -2;
+}
+.layer {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+}
+.layer > div {
+    display: flex;
+}
+.layer > div > div {
+    width: 32px;
+    height: 32px;
+    background-repeat: no-repeat;
+}
+
+/* Parallax Test
+section {
+    perspective: 4px;
+    overflow-x: auto;
+    height: 100vh;
+}
+.parallax {
+    transform: translateZ(-1px) scale(1.25);
+}
+*/

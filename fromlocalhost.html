@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="sotesmap.css" rel="stylesheet" type="text/css">
+        <script src="sotesmap.js" type="text/javascript"></script>
+        <script>
+            fetch('http://127.0.0.1:2481').then((v)=>{
+                return v.arrayBuffer()
+            }).then((v)=>{
+                if (location.search.slice(1) == 'debug') {
+                    window.map = displayData(document.querySelector('section'), v)
+                    document.querySelector('section').onclick = (e) => {
+                        console.log(Math.floor(e.layerX / 32), Math.floor(e.layerY / 32))
+                    }
+                } else displayData(document.querySelector('section'), v)
+            })
+        </script>
+    </head>
+    <body>
+        <section>
+        </section>
+    </body>
+</html>
