@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="icon" href="data:,">
+        <link href="sotesmap.css" rel="stylesheet" type="text/css">
+        <style>
+            section {
+                position: absolute;
+                margin: auto;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 640px;
+                height: 480px;
+                border: 4px double white;
+                overflow: hidden;
+                cursor: grab;
+            }
+        </style>
+        <script src="sotesconsts.js" type="text/javascript"></script>
+        <script src="sotesmapfile.js" type="text/javascript"></script>
+        <script>
+            let background, parallaxFront, parallaxBack
+            const run = (v) => {
+                const lctn = Sotes.Locations[v]
+                const area = Sotes.Areas[lctn.areaId] ? Sotes.Areas[lctn.areaId] : null
+                const backgroundIndex = lctn.backgroundIndex ? lctn.backgroundIndex : area.backgroundIndex
+                switch (backgroundIndex) {
+                    case 1:
+                    case 5:
+                    case 6:
+                    case 8:
+                    case 10:
+                    case 13:
+                    case 14:
+                    case 18:
+                        background = [1000, 1000, 1001, 1001, 1001, 2020, 1000][lctn.variant]
+                        parallaxFront = {
+                            image: 1081,
+                            offsetY: 160
+                        }
+                        break
+                    case 4:
+                    case 9:
+                        background = [1002, 1002, 1003, 1003, 1003, 1002][lctn.variant]
+                        parallaxFront = {
+                            image: 1082,
+                            offsetY: 248
+                        }
+                        parallaxBack = {
+                            image: 1722,
+                            offsetY: 224
+                        }
+                        break
+                    case 11:
+                    case 12:
+                    case 15:
+                    case 16:
+                        background = [1002, 1002, 1003, 1003, 1003, 1002][lctn.variant]
+                        parallaxFront = {
+                            image: 1720,
+                            offsetY: 200
+                        }
+                        parallaxBack = {
+                            image: 1721,
+                            offsetY: 208
+                        }
+                        break
+                    case 17:
+                        background = [1971, 1971, 1972, 1972, 1972, 1971][lctn.variant]
+                        break
+                    case 19:
+                        background = 2169
+                        parallaxFront = {
+                            image: 2172,
+                            offsetY: 160
+                        }
+                        break
+                }
+                fetch('data/'+lctn.resourceId).then((v)=>{
+                    return v.arrayBuffer()
+                }).then((v)=>{
+                    window.map = MapFile.displayData(document.querySelector('section'), v, background, parallaxFront, parallaxBack)
+                    if (location.search.slice(1) == 'debug') {
+                        document.querySelector('section').onclick = (e) => {
+                            if (e.target.classList.contains('layer')) console.log(Math.floor(e.layerX / 32), Math.floor(e.layerY / 32))
+                            else if (e.target.nodeName == 'SECTION') console.log(Math.floor((e.layerX - document.querySelector('.layer').offsetLeft) / 32), Math.floor((e.layerY - document.querySelector('.layer').offsetTop) / 32))
+                            else console.log(Math.floor(e.target.offsetLeft / 32), Math.floor(e.target.offsetTop / 32))
+                        }
+                    }
+                    document.querySelector('.layer').style.top = 480 - map.height * 32 + 'px'
+                    ev_parallax()
+                })
+            }
+
+            const init = () => {
+                run(300120)
+                pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                document.body.style.zoom = "1";
+                document.body.onpointerdown = pointerdown_handler;
+                document.body.onpointermove = pointermove_handler;
+                document.body.onpointerup = pointerup_handler;
+                document.body.onpointercancel = pointerup_handler;
+                document.body.onpointerout = pointerup_handler;
+                document.body.onpointerleave = pointerup_handler;
+            }
+
+            function ev_parallax() {
+                if (!document.querySelector('.layer')) return
+                const scroll_x_px = -document.querySelector('.layer').offsetLeft
+                const scroll_y_px = -document.querySelector('.layer').offsetTop
+                if (document.querySelector('.parallax.front')) {
+                    document.querySelector('.parallax.front').style.backgroundPositionX = (parallaxFront.offsetX || 0) - Math.floor(scroll_x_px / (parallaxFront.scrollX || 2)) + 'px'
+                    document.querySelector('.parallax.front').style.backgroundPositionY = (parallaxFront.offsetY || 0) - (document.querySelector('.parallax.back') ? Math.min(28, Math.floor(scroll_y_px / (parallaxFront.scrollY || 4))) : 0) + 'px'
+                }
+                if (document.querySelector('.parallax.back')) {
+                    document.querySelector('.parallax.back').style.backgroundPositionX = (parallaxBack.offsetX || 0) - Math.floor(scroll_x_px / (parallaxBack.scrollX || 4)) + 'px'
+                    document.querySelector('.parallax.back').style.backgroundPositionY = (parallaxBack.offsetY || 0) + 'px'
+                }
+            }
+
+            var evCache = new Array();
+            var prevDiff = -1;
+
+            function pointerdown_handler(e) {
+                e.preventDefault();
+                document.querySelector('section').style.cursor = 'grabbing'
+                lastMouseDown = new Date()
+                evCache.push(e);
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                if (evCache.length < 2 && document.querySelector('section').contains(e.target)) {
+                    document.onpointermove = elementDrag;
+                    document.onpointerup = closeDragElement;
+                    document.onpointercancel = closeDragElement;
+                } else closeDragElement();
+            }
+
+            function pointermove_handler(e) {
+                for (var i = 0; i < evCache.length; i++) {
+                    if (e.pointerId == evCache[i].pointerId) {
+                    evCache[i] = e;
+                    break;
+                    }
+                }
+                if (evCache.length == 2) {
+                    var curDiff = Math.abs(evCache[0].clientX - evCache[1].clientX);
+                    if (prevDiff > 0) {
+                    document.body.style.zoom = parseFloat(document.body.style.zoom) * (1 + (curDiff - prevDiff) / window.innerWidth);
+                    }
+                    prevDiff = curDiff;
+                }
+            }
+
+            function pointerup_handler(e) {
+                remove_event(e);
+                if (evCache.length < 2) {
+                    prevDiff = -1;
+                }
+            }
+
+            function remove_event(e) {
+                for (var i = 0; i < evCache.length; i++) {
+                    if (evCache[i].pointerId == e.pointerId) {
+                        evCache.splice(i, 1);
+                        break;
+                    }
+                }
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.querySelector('.layer').style.top = (document.querySelector('.layer').offsetTop - pos2) + "px";
+                document.querySelector('.layer').style.left = (document.querySelector('.layer').offsetLeft - pos1) + "px";
+                ev_parallax()
+            }
+
+            function closeDragElement() {
+                document.onpointermove = null;
+                document.onpointerup = null;
+                document.onpointercancel = null;
+                document.querySelector('section').style.cursor = 'grab'
+                if (document.querySelector('.layer').offsetTop < 480 - map.height * 32) {
+                    document.querySelector('.layer').style.top = 480 - map.height * 32 + 'px'
+                } else if (document.querySelector('.layer').offsetTop > 0) {
+                    document.querySelector('.layer').style.top = 0 + 'px'
+                }
+                if (document.querySelector('.layer').offsetLeft < 640 - map.width * 32) {
+                    document.querySelector('.layer').style.left = 640 - map.width * 32 + 'px'
+                } else if (document.querySelector('.layer').offsetLeft > 0) {
+                    document.querySelector('.layer').style.left = 0 + 'px'
+                }
+                ev_parallax()
+            }
+        </script>
+    </head>
+    <body onload="init()">
+        <section>
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </section>
+    </body>
+</html>

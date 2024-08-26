@@ -2,6 +2,7 @@
 <html>
     <head>
         <link href="sotesmap.css" rel="stylesheet" type="text/css">
+        <script src="sotesconsts.js" type="text/javascript"></script>
         <script src="sotesmap.js" type="text/javascript"></script>
         <script>
             const FR = new FileReader
@@ -9,12 +10,12 @@
                 FR.readAsArrayBuffer(document.querySelector('input').files[0])
             }
             FR.onload = () => {
+                window.map = MapMemory.displayData(document.querySelector('section'), FR.result)
                 if (location.search.slice(1) == 'debug') {
-                    window.map = displayData(document.querySelector('section'), FR.result)
                     document.querySelector('section').onclick = (e) => {
                         console.log(Math.floor(layerX / 32), Math.floor(e.layerY / 32))
                     }
-                } else displayData(document.querySelector('section'), FR.result)
+                }
             }
         </script>
     </head>

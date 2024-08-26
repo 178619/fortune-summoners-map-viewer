@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="sotesmap.css" rel="stylesheet" type="text/css">
+        <style>
+        </style>
+        <script src="sotesconsts.js" type="text/javascript"></script>
+        <script src="sotesmapfile.js" type="text/javascript"></script>
+        <script>
+            const FR = new FileReader
+            const convert = () => {
+                FR.readAsArrayBuffer(document.querySelector('input').files[0])
+            }
+            FR.onload = () => {
+                window.map = MapFile.displayData(document.querySelector('section'), FR.result)
+            }
+        </script>
+    </head>
+    <body>
+        <input type="file" onchange="convert()" />
+        <hr>
+        <section>
+            <div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </section>
+    </body>
+</html>

@@ -1,0 +1,392 @@
+
+    50210: {
+        resources: {
+            SSI: [147, 148]
+        }
+    },
+    50211: {
+        resources: {
+            SSI: [149, 150]
+        }
+    },
+    50212: {
+        resources: {
+            SSI: [151, 152]
+        }
+    },
+    50220: {
+        resources: {
+            SSI: [153, 154, 155]
+        }
+    },
+    50221: {
+        resources: {
+            SSI: [156, 157]
+        }
+    },
+    50226: {
+        resources: {
+            SSI: [162, 163, 164]
+        }
+    },
+    50240: {
+        resources: {
+            SSI: [165, 166, 167, 168]
+        }
+    },
+    50241: {
+        resources: {
+            SSI: [169, 170, 171, 172]
+        }
+    },
+    50242: {
+        resources: {
+            SSI: [173, 174, 175]
+        }
+    },
+    50243: {
+        resources: {
+            SSI: [176, 177, 178]
+        }
+    },
+    50260: {
+        resources: {
+            SSI: [204, 205, 206]
+        }
+    },
+    50261: {
+        resources: {
+            SSI: 207
+        }
+    },
+    50280: {
+        resources: {
+            SSI: [208, 209]
+        }
+    },
+    50281: {
+        resources: {
+            SSI: [210, 211]
+        }
+    },
+    50290: {
+        resources: {
+            SSI: [184, 185, 186]
+        }
+    },
+    50291: {
+        resources: {
+            SSI: [187, 188, 189]
+        }
+    },
+    50292: {
+        resources: {
+            SSI: [190, 191, 192]
+        }
+    },
+    50300: {
+        resources: {
+            SSI: [193, 194, 195]
+        }
+    },
+    50310: {
+        resources: {
+            SSI: [196, 197]
+        }
+    },
+    50320: {
+        resources: {
+            SSI: 198
+        }
+    },
+    50330: {
+        resources: {
+            SSI: 199
+        }
+    },
+    50340: {
+        resources: {
+            SSI: 200
+        }
+    },
+    50350: {
+        resources: {
+            SSI: 253
+        }
+    },
+    50360: {
+        resources: {
+            SSI: [254, 255]
+        }
+    },
+    50370: {
+        resources: {
+            SSI: [182, 183]
+        }
+    },
+    51010: {
+        resources: {
+            SSI: 268
+        }
+    },
+    51011: {
+        resources: {
+            SSI: 270
+        }
+    },
+    51012: {
+        resources: {
+            SSI: 271
+        }
+    },
+    51013: {
+        resources: {
+            SSI: 273
+        }
+    },
+    51014: {
+        resources: {
+            SSI: 275
+        }
+    },
+    51015: {
+        resources: {
+            SSI: 277
+        }
+    },
+    51022: {
+        resources: {
+            SSI: 288
+        }
+    },
+    51023: {
+        resources: {
+            SSI: 294
+        }
+    },
+    51024: {
+        resources: {
+            SSI: 291
+        }
+    },
+    51025: {
+        resources: {
+            SSI: 297
+        }
+    },
+    51027: {
+        resources: {
+            SSI: 301
+        }
+    },
+    51030: {
+        resources: {
+            SSI: 314
+        }
+    },
+    51031: {
+        resources: {
+            SSI: 315
+        }
+    },
+    51040: {
+        resources: {
+            SSI: 322
+        }
+    },
+    51041: {
+        resources: {
+            SSI: 323
+        }
+    },
+    51042: {
+        resources: {
+            SSI: 324
+        }
+    },
+    51043: {
+        resources: {
+            SSI: 325
+        }
+    },
+    51051: {
+        resources: {
+            SSI: 295
+        }
+    },
+    51052: {
+        resources: {
+            SSI: 296
+        }
+    },
+    51061: {
+        resources: {
+            SSI: 289
+        }
+    },
+    51062: {
+        resources: {
+            SSI: 290
+        }
+    },
+    51071: {
+        resources: {
+            SSI: 319
+        }
+    },
+    51072: {
+        resources: {
+            SSI: 320
+        }
+    },
+    51081: {
+        resources: {
+            SSI: 279
+        }
+    },
+    51082: {
+        resources: {
+            SSI: 280
+        }
+    },
+    51083: {
+        resources: {
+            SSI: 281
+        }
+    },
+    51090: {
+        resources: {
+            SSI: 284
+        }
+    },
+    51091: {
+        resources: {
+            SSI: 283
+        }
+    },
+    51092: {
+        resources: {
+            SSI: 285
+        }
+    },
+    51100: {
+        resources: {
+            SSI: 262
+        }
+    },
+    51110: {
+        resources: {
+            SSI: 266
+        }
+    },
+    51111: {
+        resources: {
+            SSI: 267
+        }
+    },
+    51120: {
+        resources: {
+            SSI: 264
+        }
+    },
+    51121: {
+        resources: {
+            SSI: 265
+        }
+    },
+    51122: {
+        resources: {
+            SSI: 263
+        }
+    },
+    51211: {
+        resources: {
+            SSI: 309
+        }
+    },
+    51212: {
+        resources: {
+            SSI: 311
+        }
+    },
+    51213: {
+        resources: {
+            SSI: 312
+        }
+    },
+    51221: {
+        resources: {
+            SSI: 298
+        }
+    },
+    51231: {
+        resources: {
+            SSI: 292
+        }
+    },
+    51232: {
+        resources: {
+            SSI: 293
+        }
+    },
+    51241: {
+        resources: {
+            SSI: 316
+        }
+    },
+    51242: {
+        resources: {
+            SSI: 317
+        }
+    },
+    51252: {
+        resources: {
+            SSI: 302
+        }
+    },
+    51253: {
+        resources: {
+            SSI: 300
+        }
+    },
+    51261: {
+        resources: {
+            SSI: 286
+        }
+    },
+    51262: {
+        resources: {
+            SSI: 287
+        }
+    },
+    58010: {
+        resources: {
+            SSI: 326
+        }
+    },
+    58020: {
+        resources: {
+            SSI: 327
+        }
+    },
+    58021: {
+        resources: {
+            SSI: [332, 333]
+        }
+    },
+    58022: {
+        resources: {
+            SSI: [334, 335]
+        }
+    },
+    58023: {
+        resources: {
+            SSI: 328
+        }
+    },
+    58024: {
+        resources: {
+            SSI: [329, 330, 331]
+        }
+    },
+

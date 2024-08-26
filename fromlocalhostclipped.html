@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="icon" href="data:,">
         <link href="sotesmap.css" rel="stylesheet" type="text/css">
         <style>
             section {
@@ -10,25 +11,28 @@
                 right: 0;
                 top: 0;
                 bottom: 0;
+                width: 640px;
+                height: 480px;
                 border: 4px double white;
                 overflow: hidden;
                 cursor: grab;
             }
         </style>
+        <script src="sotesconsts.js" type="text/javascript"></script>
         <script src="sotesmap.js" type="text/javascript"></script>
         <script>
             const init = () => {
                 fetch('http://127.0.0.1:2481').then((v)=>{
                     return v.arrayBuffer()
                 }).then((v)=>{
+                    window.map = MapMemory.displayData(document.querySelector('section'), v)
                     if (location.search.slice(1) == 'debug') {
-                        window.map = Map.displayData(document.querySelector('section'), v)
                         document.querySelector('section').onclick = (e) => {
-                            console.log(Math.floor(e.layerX / 32), Math.floor(e.layerY / 32))
+                            if (e.target.classList.contains('layer')) console.log(Math.floor(e.layerX / 32), Math.floor(e.layerY / 32))
+                            else if (e.target.nodeName == 'SECTION') console.log(Math.floor((e.layerX - document.querySelector('.layer').offsetLeft) / 32), Math.floor((e.layerY - document.querySelector('.layer').offsetTop) / 32))
+                            else console.log(Math.floor(e.target.offsetLeft / 32), Math.floor(e.target.offsetTop / 32))
                         }
-                    } else Map.displayData(document.querySelector('section'), v)
-                    document.querySelector('section').style.width = '640px'
-                    document.querySelector('section').style.height = '480px'
+                    }
                     document.querySelector('.layer').style.top = 480 - map.heightPixel / 100 + 'px'
                     ev_parallax()
                 })
@@ -42,15 +46,19 @@
                 document.body.onpointerleave = pointerup_handler;
             }
 
-			function ev_parallax() {
-				const scroll_x_px = -document.querySelector('.layer').offsetLeft
-				const scroll_y_px = -document.querySelector('.layer').offsetTop
-
-                document.querySelector('.parallax.front').style.backgroundPositionX = (map.mapParallaxFront.offsetX || 0) - Math.floor(scroll_x_px / (map.mapParallaxFront.scrollX || 2)) + 'px'
-                document.querySelector('.parallax.front').style.backgroundPositionY = (map.mapParallaxFront.offsetY || 0) - Math.min(28, Math.floor(scroll_y_px / (map.mapParallaxFront.scrollY || 4))) + 'px'
-                document.querySelector('.parallax.back').style.backgroundPositionX = (map.mapParallaxBack.offsetX || 0) - Math.floor(scroll_x_px / (map.mapParallaxBack.scrollX || 4)) + 'px'
-                document.querySelector('.parallax.back').style.backgroundPositionY = (map.mapParallaxBack.offsetY || 0) + 'px'
-			}
+            function ev_parallax() {
+                if (!document.querySelector('.layer')) return
+                const scroll_x_px = -document.querySelector('.layer').offsetLeft
+                const scroll_y_px = -document.querySelector('.layer').offsetTop
+                if (document.querySelector('.parallax.front')) {
+                    document.querySelector('.parallax.front').style.backgroundPositionX = (map.mapParallaxFront.offsetX || 0) - Math.floor(scroll_x_px / (map.mapParallaxFront.scrollX || 2)) + 'px'
+                    document.querySelector('.parallax.front').style.backgroundPositionY = (map.mapParallaxFront.offsetY || 0) - (document.querySelector('.parallax.back') ? Math.min(28, Math.floor(scroll_y_px / (map.mapParallaxFront.scrollY || 4))) : 0) + 'px'
+                }
+                if (document.querySelector('.parallax.back')) {
+                    document.querySelector('.parallax.back').style.backgroundPositionX = (map.mapParallaxBack.offsetX || 0) - Math.floor(scroll_x_px / (map.mapParallaxBack.scrollX || 4)) + 'px'
+                    document.querySelector('.parallax.back').style.backgroundPositionY = (map.mapParallaxBack.offsetY || 0) + 'px'
+                }
+            }
 
             var evCache = new Array();
             var prevDiff = -1;
